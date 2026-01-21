@@ -128,8 +128,8 @@ def generate_test_card(size: int = 512, seed: int | None = None) -> ImageBuffer:
     |             |             |             |             |
     +-------------+-------------+-------------+-------------+
     |             |             |             |             |
-    |   Horiz     |   Radial    |    Fine     |   Perlin    |
-    |   Ramp      |  Gradient   | Checkerboard|   Noise     |
+    |    Step     |   Radial    |    Fine     |   Perlin    |
+    |   Wedge     |  Gradient   | Checkerboard|   Noise     |
     |             |             |             |             |
     +-------------+-------------+-------------+-------------+
     |                                                       |
@@ -202,10 +202,14 @@ def generate_test_card(size: int = 512, seed: int | None = None) -> ImageBuffer:
 
     # === ROW 1 ===
 
-    # [1,0] Horizontal Gradient Ramp
-    ramp = np.linspace(0, 1, cell_w, dtype=np.float32)
-    ramp = np.tile(ramp, (cell_h, 1))
-    data[:, cell_h:cell_h*2, :cell_w] = ramp
+    # [1,0] Step Wedge (discrete gray levels for quantization testing)
+    num_steps = 8
+    step_width = cell_w // num_steps
+    for i in range(num_steps):
+        val = i / (num_steps - 1)  # 0.0, 0.143, 0.286, ... 1.0
+        x_start = i * step_width
+        x_end = (i + 1) * step_width if i < num_steps - 1 else cell_w
+        data[:, cell_h:cell_h*2, x_start:x_end] = val
 
     # [1,1] Radial Gradient
     center_y = cell_h + cell_h // 2
@@ -265,11 +269,11 @@ class TestCardNode(Node):
     - Checkerboard patterns (coarse and fine) - test frequency/DCT/FFT effects
     - Diagonal lines - test directional operations (pixel sort, wavelets)
     - Zone plate (concentric sine rings) - test frequency response/aliasing
-    - Horizontal gradient ramp - test threshold-based operations
-    - Radial gradient - test quantization banding
+    - Step wedge (discrete gray levels) - test quantization level merging
+    - Radial gradient - test smooth gradients and circular operations
     - Perlin noise - test segmentation and texture effects
     - Rainbow hue sweep - test color space conversions
-    - Grayscale gradient - test tonal response
+    - Grayscale gradient - test tonal response across full width
 
     This node has no inputs and generates a fresh test card each execution.
     Use the seed parameter for reproducible random elements.
