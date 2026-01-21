@@ -300,21 +300,34 @@ class FilePathParameterWidget(ParameterWidget):
         # Determine if this is for saving or loading
         self._is_save_path = self._param_info.get("is_save_path", False)
         self._file_filter = self._param_info.get("file_filter", "All Files (*)")
+        self._default_directory = self._param_info.get("default_directory", None)
+
+    def _get_start_directory(self) -> str:
+        """Get the starting directory for the file dialog."""
+        # If there's already a path entered, use that
+        current = self._edit.text()
+        if current:
+            return current
+        # Otherwise use the default directory if set
+        if self._default_directory:
+            return self._default_directory
+        return ""
 
     def _on_browse(self) -> None:
         """Open file dialog to select a path."""
+        start_dir = self._get_start_directory()
         if self._is_save_path:
             path, _ = QFileDialog.getSaveFileName(
                 self,
                 "Select Output File",
-                self._edit.text(),
+                start_dir,
                 self._file_filter,
             )
         else:
             path, _ = QFileDialog.getOpenFileName(
                 self,
                 "Select Input File",
-                self._edit.text(),
+                start_dir,
                 self._file_filter,
             )
 
@@ -432,6 +445,7 @@ class InspectorPanel(QWidget):
             "choices": getattr(param, "choices", None),
             "file_filter": getattr(param, "file_filter", None),
             "is_save_path": getattr(param, "is_save_path", False),
+            "default_directory": getattr(param, "default_directory", None),
         }
 
         param_type = param.param_type.name if hasattr(param.param_type, "name") else str(param.param_type)

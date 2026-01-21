@@ -10,6 +10,14 @@ import numpy as np
 from PIL import Image
 
 from artifice.core.data_types import ImageBuffer
+
+
+def _get_default_output_dir() -> str:
+    """Get the default output directory (project output folder)."""
+    # Get the project root (artifice package is in src/artifice)
+    output_dir = Path(__file__).parent.parent.parent.parent.parent / "output"
+    output_dir.mkdir(exist_ok=True)
+    return str(output_dir)
 from artifice.core.node import Node, ParameterType
 from artifice.core.port import PortType
 from artifice.core.registry import register_node
@@ -48,6 +56,7 @@ class ImageSaverNode(Node):
             description="Output file path",
             file_filter="PNG (*.png);;JPEG (*.jpg *.jpeg);;WebP (*.webp);;TIFF (*.tiff *.tif);;BMP (*.bmp);;All Files (*)",
             is_save_path=True,
+            default_directory=_get_default_output_dir(),
         )
         self.add_parameter(
             "quality",

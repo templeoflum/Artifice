@@ -52,6 +52,7 @@ class Parameter:
         on_change: Callback when value changes
         file_filter: File filter string for FILEPATH type (e.g., "Images (*.png *.jpg)")
         is_save_path: If True, show save dialog; if False, show open dialog (for FILEPATH)
+        default_directory: Default directory to open file dialogs in (for FILEPATH)
     """
 
     name: str
@@ -67,6 +68,7 @@ class Parameter:
     on_change: Callable[[Any], None] | None = field(default=None, repr=False)
     file_filter: str | None = None
     is_save_path: bool = False
+    default_directory: str | None = None
 
     def __post_init__(self) -> None:
         """Initialize value from default if not set."""
@@ -135,6 +137,7 @@ class Parameter:
             "description": self.description,
             "file_filter": self.file_filter,
             "is_save_path": self.is_save_path,
+            "default_directory": self.default_directory,
         }
 
     @classmethod
@@ -153,6 +156,7 @@ class Parameter:
             description=data.get("description", ""),
             file_filter=data.get("file_filter"),
             is_save_path=data.get("is_save_path", False),
+            default_directory=data.get("default_directory"),
         )
 
 
@@ -318,6 +322,7 @@ class Node(metaclass=NodeMeta):
         ui_hidden: bool = False,
         file_filter: str | None = None,
         is_save_path: bool = False,
+        default_directory: str | None = None,
     ) -> Parameter:
         """
         Add a parameter to this node.
@@ -334,6 +339,7 @@ class Node(metaclass=NodeMeta):
             ui_hidden: Hide from UI
             file_filter: File filter for FILEPATH type (e.g., "Images (*.png *.jpg)")
             is_save_path: For FILEPATH, True = save dialog, False = open dialog
+            default_directory: Default directory for file dialogs
 
         Returns:
             The created Parameter
@@ -351,6 +357,7 @@ class Node(metaclass=NodeMeta):
             on_change=lambda _: self.mark_dirty(),
             file_filter=file_filter,
             is_save_path=is_save_path,
+            default_directory=default_directory,
         )
         self.parameters[name] = param
         return param

@@ -10,6 +10,14 @@ import numpy as np
 from PIL import Image
 
 from artifice.core.data_types import ColorSpace, ImageBuffer
+
+
+def _get_default_pictures_dir() -> str:
+    """Get the user's default Pictures directory."""
+    pictures = Path.home() / "Pictures"
+    if pictures.exists():
+        return str(pictures)
+    return str(Path.home())
 from artifice.core.node import Node, ParameterType
 from artifice.core.port import PortType
 from artifice.core.registry import register_node
@@ -47,6 +55,7 @@ class ImageLoaderNode(Node):
             description="Path to image file",
             file_filter="Images (*.png *.jpg *.jpeg *.tiff *.tif *.webp *.bmp *.gif);;PNG (*.png);;JPEG (*.jpg *.jpeg);;All Files (*)",
             is_save_path=False,
+            default_directory=_get_default_pictures_dir(),
         )
 
     def process(self) -> None:
