@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from PySide6.QtCore import Qt, Signal, QPointF, QRectF, QMimeData
+from PySide6.QtCore import Qt, Signal, QPointF, QRectF, QMimeData, QTimer
 from PySide6.QtGui import (
     QPainter,
     QPen,
@@ -19,6 +19,7 @@ from PySide6.QtGui import (
     QMouseEvent,
     QKeyEvent,
     QDragEnterEvent,
+    QDragLeaveEvent,
     QDropEvent,
 )
 from PySide6.QtWidgets import (
@@ -128,6 +129,8 @@ class NodeEditorWidget(QGraphicsView):
         self._selection_rect: QGraphicsRectItem | None = None
         self._selection_start = QPointF()
         self._moving_nodes: list[tuple[NodeWidget, QPointF]] = []
+        self._is_dragging = False  # Track drag state to handle corrupted drag events
+        self._pending_connection_delete: ConnectionItem | None = None  # Deferred deletion
 
         # Clipboard
         self._clipboard: dict | None = None
@@ -350,11 +353,13 @@ class NodeEditorWidget(QGraphicsView):
         """Start drawing a connection from a port."""
         # If clicking on a connected input port, disconnect and reconnect from source
         if port.is_input and port.is_connected:
-            # Find and remove the existing connection
+            # Find the existing connection and defer its deletion
             for conn in list(self._connection_items):
                 if conn.target_port == port:
                     source_port = conn.source_port
-                    self.delete_connection(conn)
+                    # Defer deletion to avoid corrupting Qt's mouse/drag state
+                    self._pending_connection_delete = conn
+                    QTimer.singleShot(0, self._process_pending_deletion)
                     # Start a new connection from the source
                     self._source_port = source_port
                     self._temp_connection = TempConnectionItem(source_port)
@@ -366,6 +371,13 @@ class NodeEditorWidget(QGraphicsView):
         self._temp_connection = TempConnectionItem(port)
         self._scene.addItem(self._temp_connection)
         self._highlight_compatible_ports(port)
+
+    def _process_pending_deletion(self) -> None:
+        """Process any pending connection deletion after mouse event completes."""
+        if self._pending_connection_delete:
+            conn = self._pending_connection_delete
+            self._pending_connection_delete = None
+            self._delete_connection_internal(conn)
 
     def _highlight_compatible_ports(self, source_port: PortWidget) -> None:
         """Highlight ports that can accept a connection from the source."""
@@ -456,7 +468,16 @@ class NodeEditorWidget(QGraphicsView):
         self._clear_port_highlights()
 
     def delete_connection(self, conn_item: ConnectionItem) -> None:
-        """Delete a specific connection."""
+        """Delete a specific connection (may be deferred if during mouse event)."""
+        # Use internal method for immediate deletion
+        self._delete_connection_internal(conn_item)
+
+    def _delete_connection_internal(self, conn_item: ConnectionItem) -> None:
+        """Internal method to delete a connection immediately."""
+        # Check if already removed (could happen with deferred deletion)
+        if conn_item not in self._connection_items:
+            return
+
         source_port = conn_item.source_port
         target_port = conn_item.target_port
 
@@ -475,14 +496,25 @@ class NodeEditorWidget(QGraphicsView):
         target_port.is_connected = self._port_has_connections(target_port)
 
         # Clear mouse grabber to prevent "ungrabMouse without scene" errors
-        if self._scene.mouseGrabberItem() == conn_item:
-            conn_item.ungrabMouse()
+        grabber = self._scene.mouseGrabberItem()
+        if grabber is not None and grabber == conn_item:
+            try:
+                conn_item.ungrabMouse()
+            except RuntimeError:
+                # Item may already be in an invalid state
+                pass
 
         # Clear selection before removing
-        conn_item.setSelected(False)
+        try:
+            conn_item.setSelected(False)
+        except RuntimeError:
+            pass
 
         # Remove visual connection
-        self._scene.removeItem(conn_item)
+        try:
+            self._scene.removeItem(conn_item)
+        except RuntimeError:
+            pass
 
         self.graph_modified.emit()
 
@@ -800,20 +832,35 @@ class NodeEditorWidget(QGraphicsView):
     def dragEnterEvent(self, event: QDragEnterEvent) -> None:
         """Handle drag enter."""
         if event.mimeData().hasFormat("application/x-artifice-node"):
+            self._is_dragging = True
             event.acceptProposedAction()
+        else:
+            # Accept other drags to prevent Qt state corruption
+            event.ignore()
 
     def dragMoveEvent(self, event) -> None:
         """Handle drag move - required for drop to work."""
         if event.mimeData().hasFormat("application/x-artifice-node"):
             event.acceptProposedAction()
+        else:
+            event.ignore()
+
+    def dragLeaveEvent(self, event: QDragLeaveEvent) -> None:
+        """Handle drag leave - prevents errors when drag state is corrupted."""
+        self._is_dragging = False
+        # Always accept to prevent "drag leave received before drag enter" errors
+        event.accept()
 
     def dropEvent(self, event: QDropEvent) -> None:
         """Handle drop."""
+        self._is_dragging = False
         if event.mimeData().hasFormat("application/x-artifice-node"):
             node_type = event.mimeData().data("application/x-artifice-node").data().decode()
             pos = self.mapToScene(event.position().toPoint())
             self.add_node_at_position(node_type, pos.x(), pos.y())
             event.acceptProposedAction()
+        else:
+            event.ignore()
 
     # --- Slots ---
 
