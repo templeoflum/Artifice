@@ -171,11 +171,17 @@ class NodeEditorWidget(QGraphicsView):
 
     def clear(self) -> None:
         """Clear all widgets."""
+        # Clear mouse grabber to prevent "ungrabMouse without scene" errors
+        if self._scene.mouseGrabberItem():
+            self._scene.mouseGrabberItem().ungrabMouse()
+
         for widget in list(self._node_widgets.values()):
+            widget.setSelected(False)
             self._scene.removeItem(widget)
         self._node_widgets.clear()
 
         for conn in list(self._connection_items):
+            conn.setSelected(False)
             self._scene.removeItem(conn)
         self._connection_items.clear()
 
@@ -270,13 +276,19 @@ class NodeEditorWidget(QGraphicsView):
         if not widget:
             return
 
+        # Clear mouse grabber to prevent "ungrabMouse without scene" errors
+        if self._scene.mouseGrabberItem():
+            self._scene.mouseGrabberItem().ungrabMouse()
+
         # Remove connections first
         for conn in list(self._connection_items):
             if conn.source_port.node == node or conn.target_port.node == node:
+                conn.setSelected(False)
                 self._scene.removeItem(conn)
                 self._connection_items.remove(conn)
 
         # Remove widget
+        widget.setSelected(False)
         self._scene.removeItem(widget)
         del self._node_widgets[node.id]
 
@@ -292,6 +304,10 @@ class NodeEditorWidget(QGraphicsView):
         if not selected:
             return
 
+        # Clear mouse grabber to prevent "ungrabMouse without scene" errors
+        if self._scene.mouseGrabberItem():
+            self._scene.mouseGrabberItem().ungrabMouse()
+
         commands = []
         for node in selected:
             widget = self._node_widgets.get(node.id)
@@ -299,10 +315,12 @@ class NodeEditorWidget(QGraphicsView):
                 # Remove connections
                 for conn in list(self._connection_items):
                     if conn.source_port.node == node or conn.target_port.node == node:
+                        conn.setSelected(False)
                         self._scene.removeItem(conn)
                         self._connection_items.remove(conn)
 
                 # Remove widget
+                widget.setSelected(False)
                 self._scene.removeItem(widget)
                 del self._node_widgets[node.id]
 
@@ -450,13 +468,21 @@ class NodeEditorWidget(QGraphicsView):
             target_port.port_name,
         )
 
-        # Update port visual state
+        # Update port visual state - check BEFORE removing from list
+        # We need to exclude this connection when checking
+        self._connection_items.remove(conn_item)
         source_port.is_connected = self._port_has_connections(source_port)
         target_port.is_connected = self._port_has_connections(target_port)
 
+        # Clear mouse grabber to prevent "ungrabMouse without scene" errors
+        if self._scene.mouseGrabberItem() == conn_item:
+            conn_item.ungrabMouse()
+
+        # Clear selection before removing
+        conn_item.setSelected(False)
+
         # Remove visual connection
         self._scene.removeItem(conn_item)
-        self._connection_items.remove(conn_item)
 
         self.graph_modified.emit()
 
