@@ -77,16 +77,21 @@ Artifice evolves beyond traditional glitch tools (like GLIC) into a unified plat
 - **PredictNode** - GLIC-style predictors for residual generation:
   - Horizontal, Vertical, DC (mean), Paeth, Average, Gradient
   - Works with quadtree regions for adaptive prediction
+- **ResidualNode** - Calculate residuals between image and prediction
+- **ReconstructNode** - Reconstruct image from residuals and prediction
 
 ### 6. Quantization (`nodes/quantization/`)
 - **QuantizeNode** - Reduce precision with multiple modes:
   - Uniform, adaptive, per-channel quantization
   - Configurable levels (2-256)
+- **DequantizeNode** - Reverse quantization for reconstruction
 
 ### 7. Transform (`nodes/transform/`)
-- **DCTNode** - Discrete Cosine Transform (block-based or full image)
-- **FFTNode** - Fast Fourier Transform with frequency manipulation
-- **WaveletNode** - Multi-level wavelet decomposition (Haar, Daubechies, etc.)
+- **DCTNode** / **InverseDCTNode** - Discrete Cosine Transform (block-based or full image)
+- **FFTNode** / **InverseFFTNode** - Fast Fourier Transform
+- **FFTFilterNode** - Frequency domain filtering (low-pass, high-pass, band-pass)
+- **WaveletTransformNode** / **InverseWaveletNode** - Multi-level wavelet decomposition (Haar, Daubechies, etc.)
+- **WaveletCompressNode** - Wavelet-based compression with threshold
 - **PixelSortNode** - Glitch-style pixel sorting with multiple modes:
   - Sort by brightness, hue, saturation, red/green/blue
   - Horizontal, vertical, or diagonal sorting
@@ -94,14 +99,17 @@ Artifice evolves beyond traditional glitch tools (like GLIC) into a unified plat
 
 ### 8. Data Corruption (`nodes/corruption/`)
 - **BitShiftNode** / **BitFlipNode** - Bit-level manipulation
-- **ByteSwapNode** / **ByteShiftNode** - Byte-level corruption
-- **DataRepeaterNode** / **DataDropperNode** - Structural data manipulation
+- **ByteSwapNode** - Byte-level corruption
+- **XORNoiseNode** - XOR-based noise injection
+- **DataRepeatNode** / **DataDropNode** - Structural data manipulation
+- **DataWeaveNode** / **DataScrambleNode** - Row/column interleaving and scrambling
 
 ### 9. Utility (`nodes/utility/`)
 - **PassThroughNode** - Pass data unchanged (debugging)
 
 ### 10. Pipeline (`nodes/pipeline/`)
-- **GLICPipelineNode** - Combined GLIC processing in single node
+- **GLICEncodeNode** - Complete GLIC encoding pipeline (image → quantized residuals)
+- **GLICDecodeNode** - Complete GLIC decoding pipeline (residuals → image)
 
 ## Planned Node Families
 
