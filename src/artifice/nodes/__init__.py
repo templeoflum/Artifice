@@ -1,5 +1,5 @@
 """
-Artifice Engine node implementations.
+Artifice node implementations.
 
 This package contains all built-in nodes organized by category.
 """

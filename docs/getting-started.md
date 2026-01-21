@@ -1,6 +1,6 @@
-# Getting Started with Artifice Engine
+# Getting Started with Artifice
 
-Welcome to Artifice Engine! This guide will walk you through your first steps with the application, from installation to creating your first glitch art project.
+Welcome to Artifice! This guide will walk you through your first steps with the application, from installation to creating your first glitch art project.
 
 ## Table of Contents
 
@@ -26,8 +26,8 @@ python --version  # Should show 3.10 or higher
 
 ```bash
 # Clone the repository
-git clone https://github.com/templeoflum/Artifice-Engine.git
-cd Artifice-Engine
+git clone https://github.com/templeoflum/Artifice.git
+cd Artifice
 
 # Create a virtual environment
 python -m venv venv
@@ -63,7 +63,7 @@ This opens the main application window.
 
 ### Script Mode
 
-You can also use Artifice Engine programmatically:
+You can also use Artifice programmatically:
 
 ```python
 from artifice.core.graph import NodeGraph
@@ -77,7 +77,7 @@ loader = ImageLoaderNode()
 
 ## Understanding the Interface
 
-When you launch Artifice Engine, you'll see the main window divided into several panels:
+When you launch Artifice, you'll see the main window divided into several panels:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

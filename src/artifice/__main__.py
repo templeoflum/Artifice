@@ -1,5 +1,5 @@
 """
-Entry point for running Artifice Engine as a module.
+Entry point for running Artifice as a module.
 
 Usage:
     python -m artifice
@@ -81,12 +81,12 @@ def register_all_nodes():
 
 
 def main():
-    """Launch the Artifice Engine application."""
+    """Launch the Artifice application."""
     # Register all nodes before creating the UI
     register_all_nodes()
 
     app = QApplication(sys.argv)
-    app.setApplicationName("Artifice Engine")
+    app.setApplicationName("Artifice")
     app.setOrganizationName("Artifice")
 
     window = MainWindow()

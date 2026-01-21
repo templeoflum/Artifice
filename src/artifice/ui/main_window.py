@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 class MainWindow(QMainWindow):
     """
-    Main application window for Artifice Engine.
+    Main application window for Artifice.
 
     Contains the node editor canvas as the central widget, with
     dockable panels for preview, inspector, and node palette.
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowTitle("Artifice Engine")
+        self.setWindowTitle("Artifice")
         self.setMinimumSize(1200, 800)
 
         # Core components
@@ -371,7 +371,7 @@ class MainWindow(QMainWindow):
 
     def _update_title(self) -> None:
         """Update the window title."""
-        title = "Artifice Engine"
+        title = "Artifice"
         if self._current_file:
             title = f"{self._current_file.name} - {title}"
         if self._modified:
@@ -570,8 +570,8 @@ class MainWindow(QMainWindow):
         """Show about dialog."""
         QMessageBox.about(
             self,
-            "About Artifice Engine",
-            "Artifice Engine\n\n"
+            "About Artifice",
+            "Artifice\n\n"
             "A node-based glitch art tool.\n\n"
             "Converse with Chaos, Sculpt Emergence.",
         )

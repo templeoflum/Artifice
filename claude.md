@@ -1,4 +1,4 @@
-# Artifice Engine
+# Artifice
 
 **Motto:** *Converse with Chaos, Sculpt Emergence.*
 
@@ -6,7 +6,7 @@ A next-generation glitch art co-creative environment built on a node-based archi
 
 ## Project Overview
 
-Artifice Engine evolves beyond traditional glitch tools (like GLIC) into a unified platform where codec design, glitch art, generative art, and AI-assisted creation converge. The system enables users to cultivate and guide digital ecologies that produce aesthetically rich, often unpredictable visual and auditory experiences.
+Artifice evolves beyond traditional glitch tools (like GLIC) into a unified platform where codec design, glitch art, generative art, and AI-assisted creation converge. The system enables users to cultivate and guide digital ecologies that produce aesthetically rich, often unpredictable visual and auditory experiences.
 
 ## Current Implementation Status
 
@@ -107,7 +107,7 @@ Artifice Engine evolves beyond traditional glitch tools (like GLIC) into a unifi
 
 ### Code Organization
 ```
-Artifice-Engine/
+Artifice/
 ├── output/                # Default output directory for saved images
 ├── src/artifice/
 │   ├── core/              # Node system, graph, ports, registry

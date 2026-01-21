@@ -1,6 +1,6 @@
 # API Reference
 
-Complete API documentation for Artifice Engine.
+Complete API documentation for Artifice.
 
 ## Table of Contents
 

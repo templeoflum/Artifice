@@ -1,5 +1,5 @@
 """
-Core data types for Artifice Engine.
+Core data types for Artifice.
 
 Provides ImageBuffer (multi-channel float arrays with border handling),
 Segment, and SegmentList for quadtree-based region processing.

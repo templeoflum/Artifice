@@ -1,6 +1,6 @@
-# Artifice Engine Architecture
+# Artifice Architecture
 
-This document describes the system architecture of Artifice Engine, explaining the core concepts, data flow, and design decisions.
+This document describes the system architecture of Artifice, explaining the core concepts, data flow, and design decisions.
 
 ## Table of Contents
 
@@ -15,11 +15,11 @@ This document describes the system architecture of Artifice Engine, explaining t
 
 ## Overview
 
-Artifice Engine is built on a **node-based processing architecture** where complex image transformations are constructed by connecting simple, focused processing units (nodes) into directed acyclic graphs (DAGs).
+Artifice is built on a **node-based processing architecture** where complex image transformations are constructed by connecting simple, focused processing units (nodes) into directed acyclic graphs (DAGs).
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     Artifice Engine                              │
+│                     Artifice                              │
 ├─────────────────────────────────────────────────────────────────┤
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐ │
 │  │   UI Layer  │  │  Core Layer │  │     Processing Layer    │ │

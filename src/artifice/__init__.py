@@ -1,5 +1,5 @@
 """
-Artifice Engine - A node-based glitch art co-creative environment.
+Artifice - A node-based glitch art co-creative environment.
 
 Converse with Chaos, Sculpt Emergence.
 """

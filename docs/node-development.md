@@ -1,6 +1,6 @@
 # Node Development Guide
 
-This guide explains how to create custom nodes for Artifice Engine. Whether you want to implement a new glitch effect, add support for a new file format, or integrate an external library, this guide covers everything you need to know.
+This guide explains how to create custom nodes for Artifice. Whether you want to implement a new glitch effect, add support for a new file format, or integrate an external library, this guide covers everything you need to know.
 
 ## Table of Contents
 
@@ -18,7 +18,7 @@ This guide explains how to create custom nodes for Artifice Engine. Whether you 
 
 ## Node Anatomy
 
-Every node in Artifice Engine consists of:
+Every node in Artifice consists of:
 
 1. **Metadata**: Name, category, description
 2. **Input Ports**: Data the node receives
@@ -122,7 +122,7 @@ Save this as `src/artifice/nodes/color/brightness.py` and you have a working nod
 
 ### Port Types
 
-Artifice Engine supports several port types:
+Artifice supports several port types:
 
 ```python
 from artifice.core.port import PortType
@@ -306,7 +306,7 @@ def _corrupt_glitch(self, data: np.ndarray, intensity: float) -> np.ndarray:
 
 ### ImageBuffer Format
 
-Images in Artifice Engine use the `ImageBuffer` class:
+Images in Artifice use the `ImageBuffer` class:
 
 ```python
 from artifice.core.data_types import ImageBuffer

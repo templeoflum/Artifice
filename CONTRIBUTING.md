@@ -1,6 +1,6 @@
-# Contributing to Artifice Engine
+# Contributing to Artifice
 
-Thank you for your interest in contributing to Artifice Engine! This document provides guidelines and information for contributors.
+Thank you for your interest in contributing to Artifice! This document provides guidelines and information for contributors.
 
 ## Table of Contents
 
@@ -38,8 +38,8 @@ Please be respectful and constructive in all interactions. We're building a crea
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/Artifice-Engine.git
-cd Artifice-Engine
+git clone https://github.com/YOUR_USERNAME/Artifice.git
+cd Artifice
 
 # Create virtual environment
 python -m venv venv
@@ -337,12 +337,12 @@ For feature requests, please describe:
 
 ## Questions?
 
-- Open a [GitHub Discussion](https://github.com/templeoflum/Artifice-Engine/discussions) for general questions
-- Check existing [Issues](https://github.com/templeoflum/Artifice-Engine/issues) for known problems
+- Open a [GitHub Discussion](https://github.com/templeoflum/Artifice/discussions) for general questions
+- Check existing [Issues](https://github.com/templeoflum/Artifice/issues) for known problems
 - Review the [Documentation](docs/) for guides and references
 
 ---
 
-Thank you for contributing to Artifice Engine!
+Thank you for contributing to Artifice!
 
 *Converse with Chaos, Sculpt Emergence.*

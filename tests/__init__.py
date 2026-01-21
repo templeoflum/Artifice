@@ -1,1 +1,1 @@
-"""Artifice Engine test suite."""
+"""Artifice test suite."""

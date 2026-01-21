@@ -1,7 +1,7 @@
 """
 Base Node class and parameter system.
 
-Nodes are the fundamental processing units in Artifice Engine.
+Nodes are the fundamental processing units in Artifice.
 Each node has typed input/output ports and parameters.
 """
 

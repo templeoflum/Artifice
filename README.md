@@ -1,4 +1,4 @@
-# Artifice Engine
+# Artifice
 
 **Converse with Chaos, Sculpt Emergence.**
 
@@ -8,11 +8,11 @@
 
 A next-generation glitch art co-creative environment built on a node-based architecture for emergent complexity, semantic awareness, and generative processes.
 
-![Artifice Engine Screenshot](docs/images/screenshot.png)
+![Artifice Screenshot](docs/images/screenshot.png)
 
 ## Overview
 
-Artifice Engine evolves beyond traditional glitch tools into a unified platform where codec design, glitch art, generative art, and AI-assisted creation converge. The system enables users to cultivate and guide digital ecologies that produce aesthetically rich, often unpredictable visual and auditory experiences.
+Artifice evolves beyond traditional glitch tools into a unified platform where codec design, glitch art, generative art, and AI-assisted creation converge. The system enables users to cultivate and guide digital ecologies that produce aesthetically rich, often unpredictable visual and auditory experiences.
 
 ### Key Features
 
@@ -37,8 +37,8 @@ Artifice Engine evolves beyond traditional glitch tools into a unified platform 
 
 ```bash
 # Clone the repository
-git clone https://github.com/templeoflum/Artifice-Engine.git
-cd Artifice-Engine
+git clone https://github.com/templeoflum/Artifice.git
+cd Artifice
 
 # Create a virtual environment (recommended)
 python -m venv venv
@@ -123,7 +123,7 @@ graph.execute()
 
 ## Node Families
 
-Artifice Engine provides a rich library of processing nodes organized by function:
+Artifice provides a rich library of processing nodes organized by function:
 
 ### Input/Output
 - **Image Loader** - Load images with file browser (PNG, JPG, TIFF, WebP, BMP, GIF)
@@ -170,7 +170,7 @@ See [CLAUDE.md](CLAUDE.md) for:
 ## Project Structure
 
 ```
-Artifice-Engine/
+Artifice/
 ├── src/artifice/
 │   ├── core/           # Node system, graph, data types
 │   ├── nodes/          # Node implementations
@@ -190,7 +190,7 @@ Artifice-Engine/
 
 ## Development Status
 
-Artifice Engine is under active development. Current implementation status:
+Artifice is under active development. Current implementation status:
 
 - [x] **Phase 1**: Core node system and data flow
 - [x] **Phase 2**: GLIC-style processing nodes
@@ -230,8 +230,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contact
 
-- **Repository**: [github.com/templeoflum/Artifice-Engine](https://github.com/templeoflum/Artifice-Engine)
-- **Issues**: [GitHub Issues](https://github.com/templeoflum/Artifice-Engine/issues)
+- **Repository**: [github.com/templeoflum/Artifice](https://github.com/templeoflum/Artifice)
+- **Issues**: [GitHub Issues](https://github.com/templeoflum/Artifice/issues)
 
 ---
 

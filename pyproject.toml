@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "artifice-engine"
+name = "artifice"
 version = "0.1.0"
 description = "A node-based glitch art co-creative environment"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
-    {name = "Artifice Engine Contributors"}
+    {name = "Artifice Contributors"}
 ]
 keywords = ["glitch", "art", "generative", "node-based", "image-processing"]
 classifiers = [
@@ -60,16 +60,16 @@ dev = [
     "mypy>=1.0.0",
 ]
 all = [
-    "artifice-engine[gpu,ui,video,audio,ai,dev]",
+    "artifice[gpu,ui,video,audio,ai,dev]",
 ]
 
 [project.scripts]
 artifice = "artifice.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/templeoflum/Artifice-Engine"
-Repository = "https://github.com/templeoflum/Artifice-Engine"
-Issues = "https://github.com/templeoflum/Artifice-Engine/issues"
+Homepage = "https://github.com/templeoflum/Artifice"
+Repository = "https://github.com/templeoflum/Artifice"
+Issues = "https://github.com/templeoflum/Artifice/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

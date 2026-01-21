@@ -1,5 +1,5 @@
 """
-Artifice Engine User Interface.
+Artifice User Interface.
 
 Qt-based node editor with preview and parameter controls.
 """
