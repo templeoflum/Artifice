@@ -174,13 +174,14 @@ Current focus is on stability and usability. Planned features:
 - **Video synthesis** - Oscillators, colorizers, keyers, and feedback systems inspired by hardware video synthesizers (LZX, Vidiot, Fairlight CVI)
 - **Real-time preview** - Continuous render loop for live synthesis experimentation
 - **Video processing** - Frame-by-frame processing, temporal effects, frame blending
+- **Audio processing** - Audio codecs, compression artifacts, sonification techniques, spectrogram manipulation
 - **Audio reactivity** - Drive parameters from audio input
 - **GPU acceleration** - CUDA/OpenCL for performance-critical operations
 - **AI integration** - Semantic segmentation, style transfer, learned effects
 
 ## Documentation
 
-- [CLAUDE.md](CLAUDE.md) - Architecture, node development guide, API reference
+- [CLAUDE.md](CLAUDE.md) - Architecture, node development guide, API reference (also serves as context for Claude Code)
 - [docs/getting-started.md](docs/getting-started.md) - Detailed tutorial
 - [docs/node-development.md](docs/node-development.md) - Creating custom nodes
 
@@ -200,8 +201,13 @@ pytest --cov=artifice
 
 MIT License - see [LICENSE](LICENSE)
 
+## Development
+
+This project is developed using [Claude Code](https://claude.ai/claude-code), with Claude (Anthropic's AI) handling implementation under human guidance and creative direction. The codebase is structured for continued AI-assisted development - see [CLAUDE.md](CLAUDE.md) for architecture details and development patterns.
+
 ## Acknowledgments
 
+- Developed with [Claude Code](https://claude.ai/claude-code) by Anthropic
 - Inspired by [GLIC](https://github.com/snorpey/glitch-canvas) and glitch art research
 - Built with [PySide6](https://www.qt.io/qt-for-python)
 - Node editor concepts from Blender, Nuke, and TouchDesigner

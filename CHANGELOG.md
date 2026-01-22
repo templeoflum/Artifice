@@ -11,8 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Video Synthesis** - Oscillators, signal generators, colorizers, keyers, feedback systems (LZX/Vidiot/Fairlight CVI inspired)
 - Real-time preview infrastructure for live synthesis
 - Video/temporal processing nodes
-- AI-powered segmentation and style transfer
+- **Audio Processing** - Audio codecs, compression artifacts, sonification, spectrogram manipulation
 - Audio reactivity system
+- AI-powered segmentation and style transfer
 - GPU acceleration via CUDA/OpenCL
 - Plugin system for community nodes
 
