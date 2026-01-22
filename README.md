@@ -68,6 +68,25 @@ The workspace opens with a Test Card and Color Space node already connected, so 
 4. **Execute** - Press Shift+E or click Execute to process the graph
 5. **Save output** - Add an Image Saver node and configure the output path
 
+### Understanding the Test Card
+
+The Test Card is a procedural calibration image designed to reveal how different effects behave. Each region targets specific operations:
+
+| Pattern | Purpose |
+|---------|---------|
+| **Color Bars** (RGBCMYK) | Test color/channel operations, see how effects treat individual colors |
+| **Checkerboard** (8×8) | Reveal frequency-domain effects (DCT, FFT), compression artifacts |
+| **Diagonal Lines** | Test directional operations like pixel sorting and wavelet transforms |
+| **Zone Plate** | Concentric sine rings that expose aliasing and frequency response |
+| **Step Wedge** | Discrete gray levels to visualize quantization and bit depth reduction |
+| **Radial Gradient** | Test smooth gradients, circular distortions, and vignette effects |
+| **Fine Checkerboard** (16×16) | Higher frequency patterns for detailed frequency analysis |
+| **Perlin Noise** | Test segmentation algorithms and texture-based effects |
+| **Rainbow Hue Sweep** | Full-width spectrum for color space conversion testing |
+| **Grayscale Gradient** | Full tonal range to test contrast, gamma, and tonal response |
+
+When experimenting with a new node, run it on the Test Card first - the structured patterns make it easy to understand what the effect is actually doing.
+
 ### Example: Color Space Glitch Sort
 
 ```
