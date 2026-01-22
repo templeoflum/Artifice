@@ -60,12 +60,13 @@ python -m artifice
 
 ### Basic Workflow
 
-1. **Add a Test Card** - Drag "Test Card" from the Generator category (or use Image Loader for your own images)
-2. **Add processing nodes** - Drag nodes from the palette onto the canvas
-3. **Connect nodes** - Click an output port, then click an input port
-4. **Adjust parameters** - Select a node to edit its settings in the inspector
-5. **Execute** - Press Shift+E or click Execute to process the graph
-6. **Save output** - Add an Image Saver node and configure the output path
+The workspace opens with a Test Card and Color Space node already connected, so you can start experimenting immediately.
+
+1. **Add processing nodes** - Drag nodes from the palette onto the canvas
+2. **Connect nodes** - Click an output port, then click an input port
+3. **Adjust parameters** - Select a node to edit its settings in the inspector
+4. **Execute** - Press Shift+E or click Execute to process the graph
+5. **Save output** - Add an Image Saver node and configure the output path
 
 ### Example: Color Space Glitch Sort
 
@@ -73,12 +74,10 @@ python -m artifice
 [Test Card] → [Color Space] → [Bit Flip] → [Pixel Sort]
 ```
 
-1. Add a **Test Card** node (Generator category)
-2. Add **Color Space** (Color) - leave as RGB for now
-3. Add **Bit Flip** (Corruption) - set bit position to 7, probability to 1.0
-4. Add **Pixel Sort** (Transform) - set mode to "brightness"
-5. Connect them in sequence and execute (Shift+E)
-6. Now change **Color Space** to YCbCr or LAB and execute again - observe how the same corruption produces completely different effects depending on color space
+1. Add **Bit Flip** (Corruption) - set bit position to 7, probability to 1.0
+2. Add **Pixel Sort** (Transform) - set mode to "brightness"
+3. Connect them to the existing Color Space node and execute (Shift+E)
+4. Now change **Color Space** to YCbCr or LAB and execute again - observe how the same corruption produces completely different effects depending on color space
 
 ## Node Categories
 
