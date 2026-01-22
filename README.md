@@ -67,17 +67,18 @@ python -m artifice
 5. **Execute** - Press F5 or click Execute to process the graph
 6. **Save output** - Add an Image Saver node and configure the output path
 
-### Example: Glitchy Pixel Sort
+### Example: Color Space Glitch
 
 ```
-[Test Card] → [Bit Flip] → [Pixel Sort] → [Image Saver]
+[Test Card] → [Color Space] → [Bit Flip] → [Pixel Sort]
 ```
 
 1. Add a **Test Card** node (Generator category)
-2. Add **Bit Flip** (Corruption) - set probability to 0.001
-3. Add **Pixel Sort** (Transform) - set mode to "brightness"
-4. Add **Image Saver** (I/O) - set output path
-5. Connect them in sequence and execute
+2. Add **Color Space** (Color) - leave as RGB for now
+3. Add **Bit Flip** (Corruption) - set bit position to 7, probability to 1.0
+4. Add **Pixel Sort** (Transform) - set mode to "brightness", lower the threshold to get visible results
+5. Connect them in sequence and execute (F5)
+6. Now change **Color Space** to YCbCr or LAB and execute again - observe how the same corruption produces completely different effects depending on color space
 
 ## Node Categories
 
