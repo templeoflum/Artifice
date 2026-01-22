@@ -6,7 +6,9 @@ Usage:
 """
 
 import sys
+from pathlib import Path
 from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon
 from artifice.ui.main_window import MainWindow
 from artifice.core.registry import NodeRegistry
 
@@ -119,6 +121,11 @@ def main():
     app = QApplication(sys.argv)
     app.setApplicationName("Artifice")
     app.setOrganizationName("Artifice")
+
+    # Set application icon
+    icon_path = Path(__file__).parent / "ui" / "resources" / "icon.png"
+    if icon_path.exists():
+        app.setWindowIcon(QIcon(str(icon_path)))
 
     window = MainWindow()
     window.show()

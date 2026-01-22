@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!-- Background -->
+  <rect x="0" y="0" width="1024" height="1024" fill="#0f0f12"/>
+
+  <!-- Concentric quantization rings (hard, no gradients) -->
+  <g fill="none" stroke="#1f222a" stroke-width="10">
+    <circle cx="512" cy="512" r="69.333"/>
+    <circle cx="512" cy="512" r="138.667"/>
+    <circle cx="512" cy="512" r="208"/>
+    <circle cx="512" cy="512" r="277.333"/>
+    <circle cx="512" cy="512" r="346.667"/>
+    <circle cx="512" cy="512" r="416"/>
+  </g>
+
+  <!-- Spectrum wedges with separation stroke for definition -->
+  <g fill="#e6e6ea" stroke="#0f0f12" stroke-width="14" stroke-linejoin="round">
+    <path d="M 512 512 L 928 512 A 416 416 0 0 1 896.334 671.196 Z"/>
+    <path d="M 512 512 L 896.334 671.196 A 416 416 0 0 1 806.156 806.156 Z"/>
+    <path d="M 512 512 L 757.13 757.13 A 346.667 346.667 0 0 1 644.664 832.278 Z"/>
+    <path d="M 512 512 L 644.664 832.278 A 346.667 346.667 0 0 1 512 858.667 Z"/>
+    <path d="M 512 512 L 671.196 896.334 A 277.333 277.333 0 0 1 512 789.333 Z"/>
+    <path d="M 512 512 L 512 789.333 A 277.333 277.333 0 0 1 352.804 896.334 Z"/>
+    <path d="M 512 512 L 365.01 865.295 A 208 208 0 0 1 252.414 771.13 Z"/>
+    <path d="M 512 512 L 352.804 896.334 A 138.667 138.667 0 0 1 414.04 640.949 Z"/>
+    <path d="M 512 512 L 414.04 640.949 A 138.667 138.667 0 0 1 314.667 512 Z"/>
+    <path d="M 512 512 L 314.667 512 A 208 208 0 0 1 365.01 365.01 Z"/>
+    <path d="M 512 512 L 315.333 315.333 A 277.333 277.333 0 0 1 512 234.667 Z"/>
+
+    <!-- bin 11 (inner portion only; outer portion becomes "glitch overlay") -->
+    <path d="M 512 512 L 512 304 A 208 208 0 0 1 646.99 355.337 Z"/>
+
+    <path d="M 512 512 L 671.196 127.666 A 346.667 346.667 0 0 1 806.156 217.844 Z"/>
+    <path d="M 512 512 L 806.156 217.844 A 346.667 346.667 0 0 1 896.334 352.804 Z"/>
+    <path d="M 512 512 L 896.334 352.804 A 416 416 0 0 1 928 512 Z"/>
+
+    <!-- bin 15: thin "DC seam" artifact -->
+    <path d="M 512 512 L 928 512 A 416 416 0 0 1 924.0 569.0 Z"/>
+  </g>
+
+  <!-- The outer shell geometry (same shape as before), but now integrated (neutral) -->
+  <g fill="#e6e6ea" stroke="#0f0f12" stroke-width="14" stroke-linejoin="round">
+    <path id="anomalyShell" d="M 663.252 369.94 L 814.503 227.065 A 346.667 346.667 0 0 1 868.286 320.812 L 720.972 415.458 A 208 208 0 0 0 663.252 369.94 Z"/>
+  </g>
+
+  <!-- Glitch overlay: intentional channel layer (cyan), with offset echo + scan fragments -->
+  <g fill="none" stroke="#00d4ff" stroke-linejoin="round" stroke-linecap="square">
+    <!-- primary cyan trace -->
+    <use href="#anomalyShell" stroke-width="10"/>
+
+    <!-- offset echo (controlled, not noisy) -->
+    <g opacity="0.33" transform="translate(10,-8)">
+      <use href="#anomalyShell" stroke-width="10"/>
+    </g>
+
+    <!-- secondary micro-trace (gives definition without adding new structure) -->
+    <g opacity="0.65">
+      <use href="#anomalyShell" stroke-width="4"/>
+    </g>
+  </g>
+
+  <!-- Pixel/bit fragments near the anomaly (hard-edged, aligned) -->
+  <g fill="#00d4ff" opacity="0.85">
+    <rect x="846" y="244" width="14" height="14"/>
+    <rect x="872" y="266" width="10" height="10"/>
+    <rect x="900" y="292" width="18" height="10"/>
+    <rect x="878" y="318" width="12" height="18"/>
+    <rect x="914" y="334" width="10" height="10"/>
+    <rect x="892" y="356" width="22" height="12"/>
+    <rect x="918" y="378" width="12" height="12"/>
+  </g>
+
+  <!-- Right-side scanline displacement fragments (subtle, clipped) -->
+  <defs>
+    <clipPath id="rightClip">
+      <rect x="640" y="160" width="320" height="480"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#rightClip)" stroke="#00d4ff" stroke-width="6" opacity="0.35">
+    <path d="M 640 272 H 948"/>
+    <path d="M 660 312 H 960"/>
+    <path d="M 632 352 H 944"/>
+    <path d="M 676 392 H 960"/>
+    <path d="M 648 432 H 952"/>
+  </g>
+
+  <!-- Tiny alignment ticks on a quantization ring near the anomaly (adds "instrument" feel) -->
+  <g stroke="#00d4ff" stroke-width="6" opacity="0.7">
+    <path d="M 820 268 L 850 252"/>
+    <path d="M 842 300 L 874 286"/>
+    <path d="M 862 334 L 892 322"/>
+  </g>
+</svg>

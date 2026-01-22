@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import Qt, QSettings
-from PySide6.QtGui import QAction, QKeySequence, QCloseEvent
+from PySide6.QtGui import QAction, QKeySequence, QCloseEvent, QIcon
 from PySide6.QtWidgets import (
     QMainWindow,
     QDockWidget,
@@ -50,6 +50,11 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Artifice")
         self.setMinimumSize(1200, 800)
+
+        # Set application icon
+        icon_path = Path(__file__).parent / "resources" / "icon.png"
+        if icon_path.exists():
+            self.setWindowIcon(QIcon(str(icon_path)))
 
         # Core components
         self._graph = NodeGraph()
