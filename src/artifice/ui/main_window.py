@@ -25,11 +25,13 @@ from PySide6.QtWidgets import (
 )
 
 from artifice.core.graph import NodeGraph
+from artifice.core.version_checker import VersionChecker, VersionInfo
 from artifice.ui.node_editor import NodeEditorWidget
 from artifice.ui.preview import PreviewPanel
 from artifice.ui.inspector import InspectorPanel
 from artifice.ui.palette import NodePalette
 from artifice.ui.undo import UndoStack
+from artifice.ui.about_dialog import AboutDialog
 
 if TYPE_CHECKING:
     from artifice.core.node import Node
@@ -55,6 +57,10 @@ class MainWindow(QMainWindow):
         self._current_file: Path | None = None
         self._modified = False
 
+        # Version checking
+        self._version_checker = VersionChecker(self)
+        self._pending_update: VersionInfo | None = None
+
         # Create UI components
         self._setup_ui()
         self._setup_menus()
@@ -67,6 +73,9 @@ class MainWindow(QMainWindow):
 
         # Create default startup graph
         self._create_default_graph()
+
+        # Check for updates on startup (if enabled)
+        self._check_updates_on_startup()
 
     @property
     def graph(self) -> NodeGraph:
@@ -257,6 +266,12 @@ class MainWindow(QMainWindow):
         # Help menu
         help_menu = menubar.addMenu("&Help")
 
+        self._action_check_updates = QAction("Check for &Updates...", self)
+        self._action_check_updates.triggered.connect(self._check_for_updates)
+        help_menu.addAction(self._action_check_updates)
+
+        help_menu.addSeparator()
+
         self._action_about = QAction("&About", self)
         self._action_about.triggered.connect(self._show_about)
         help_menu.addAction(self._action_about)
@@ -302,6 +317,10 @@ class MainWindow(QMainWindow):
         # Undo stack changes
         self._undo_stack.can_undo_changed.connect(self._action_undo.setEnabled)
         self._undo_stack.can_redo_changed.connect(self._action_redo.setEnabled)
+
+        # Version checker
+        self._version_checker.update_available.connect(self._on_update_available)
+        self._version_checker.check_complete.connect(self._on_update_check_complete)
 
         # Initial state
         self._action_undo.setEnabled(False)
@@ -574,14 +593,37 @@ class MainWindow(QMainWindow):
         self._mark_modified()
 
     def _show_about(self) -> None:
-        """Show about dialog."""
-        QMessageBox.about(
+        """Show enhanced about dialog."""
+        dialog = AboutDialog(
             self,
-            "About Artifice",
-            "Artifice\n\n"
-            "A node-based glitch art tool.\n\n"
-            "Converse with Chaos, Sculpt Emergence.",
+            update_info=self._pending_update,
+            releases_url=self._version_checker.get_releases_url(),
         )
+        dialog.set_check_callback(self._check_for_updates)
+        dialog.exec()
+
+    def _check_updates_on_startup(self) -> None:
+        """Check for updates if enabled in settings."""
+        settings = QSettings("ArtificeEngine", "Artifice")
+        if settings.value("updates/check_on_startup", True, type=bool):
+            self._version_checker.check_for_updates(force=False)
+
+    def _check_for_updates(self) -> None:
+        """Manually check for updates."""
+        self._statusbar.showMessage("Checking for updates...")
+        self._version_checker.check_for_updates(force=True)
+
+    def _on_update_available(self, info: VersionInfo) -> None:
+        """Handle update available notification."""
+        self._pending_update = info
+        self._statusbar.showMessage(f"Update available: v{info.version}")
+
+    def _on_update_check_complete(self, success: bool, message: str) -> None:
+        """Handle update check completion."""
+        if success and not self._pending_update:
+            self._statusbar.showMessage("Artifice is up to date", 5000)
+        elif not success:
+            self._statusbar.showMessage(f"Update check: {message}", 5000)
 
     def _create_default_graph(self) -> None:
         """Create the default startup graph with Test Card → Color Space."""

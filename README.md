@@ -170,8 +170,9 @@ Artifice/
 
 Current focus is on stability and usability. Planned features:
 
+- **Analog video synthesis** - Oscillators, colorizers, keyers, and feedback systems inspired by hardware video synthesizers (LZX, Vidiot, Fairlight CVI)
+- **Real-time preview** - Continuous render loop for live synthesis experimentation
 - **Video processing** - Frame-by-frame processing, temporal effects, frame blending
-- **Real-time modulation** - Parameter animation, LFOs, envelope generators
 - **Audio reactivity** - Drive parameters from audio input
 - **GPU acceleration** - CUDA/OpenCL for performance-critical operations
 - **AI integration** - Semantic segmentation, style transfer, learned effects

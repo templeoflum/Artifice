@@ -23,6 +23,8 @@ Artifice evolves beyond traditional glitch tools (like GLIC) into a unified plat
 - ✅ Procedural test card generator for calibration and effect visualization
 
 ### Planned Features
+- ⏳ **Analog video synthesis** - Oscillators, colorizers, keyers, feedback systems (LZX/Vidiot inspired)
+- ⏳ Real-time preview infrastructure
 - ⏳ Video/temporal processing
 - ⏳ AI integration (segmentation, style transfer)
 - ⏳ Audio reactivity
@@ -112,6 +114,17 @@ Artifice evolves beyond traditional glitch tools (like GLIC) into a unified plat
 - **GLICDecodeNode** - Complete GLIC decoding pipeline (residuals → image)
 
 ## Planned Node Families
+
+### Analog Video Synthesis (Next Phase)
+Emulates hardware video synthesizers (LZX, Vidiot, Fairlight CVI style) with real-time preview.
+
+- **Oscillators** - Sine, triangle, sawtooth, square wave generators with frequency/amplitude/phase
+- **Signal Generators** - Ramps (H/V), gradients (linear/radial/angular), shapes, grids
+- **Modulators** - Video-rate LFOs, envelopes, sample-and-hold, slew limiters
+- **Colorizers** - Grayscale to color mapping, threshold bands, gradient maps, RGB mixers
+- **Keyers** - Luma key, chroma key, multiplicative keying, additive/difference mixing
+- **Feedback** - Frame buffers, delay, decay, spatial transforms in feedback path
+- **Pattern Generators** - Moire interference, Lissajous curves, spirals, kaleidoscope
 
 ### Temporal Processing (Video)
 - FrameBlend/Difference, FrameBuffer, FrameScrambler
