@@ -4,6 +4,8 @@
 
 A next-generation glitch art co-creative environment built on a node-based architecture for emergent complexity, semantic awareness, and generative processes.
 
+> **Note:** This file serves as both documentation and context for [Claude Code](https://claude.ai/claude-code). The entire codebase was developed by Claude under human creative direction, and this file provides Claude with the architectural knowledge needed to continue development. If you're contributing with Claude Code, it will automatically use this file as context.
+
 ## Project Overview
 
 Artifice evolves beyond traditional glitch tools (like GLIC) into a unified platform where codec design, glitch art, generative art, and AI-assisted creation converge. The system enables users to cultivate and guide digital ecologies that produce aesthetically rich, often unpredictable visual and auditory experiences.
@@ -23,11 +25,12 @@ Artifice evolves beyond traditional glitch tools (like GLIC) into a unified plat
 - ✅ Procedural test card generator for calibration and effect visualization
 
 ### Planned Features
-- ⏳ **Analog video synthesis** - Oscillators, colorizers, keyers, feedback systems (LZX/Vidiot inspired)
+- ⏳ **Video synthesis** - Oscillators, colorizers, keyers, feedback systems (LZX/Vidiot inspired)
 - ⏳ Real-time preview infrastructure
 - ⏳ Video/temporal processing
-- ⏳ AI integration (segmentation, style transfer)
+- ⏳ **Audio processing** - Codecs, compression artifacts, sonification, spectrogram manipulation
 - ⏳ Audio reactivity
+- ⏳ AI integration (segmentation, style transfer)
 - ⏳ GPU acceleration
 - ⏳ Plugin ecosystem
 
