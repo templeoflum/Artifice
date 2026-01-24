@@ -237,7 +237,7 @@ This project is developed using [Claude Code](https://claude.ai/claude-code), wi
 ## Acknowledgments
 
 - Developed with [Claude Code](https://claude.ai/claude-code) by Anthropic
-- Inspired by [GLIC](https://github.com/snorpey/glitch-canvas) and glitch art research
+- Inspired by [GLIC](https://github.com/GlitchCodec/GLIC) and glitch art research
 - Built with [PySide6](https://www.qt.io/qt-for-python)
 - Node editor concepts from Blender, Nuke, and TouchDesigner
 
