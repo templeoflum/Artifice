@@ -151,6 +151,10 @@ class ResidualNode(Node):
     The residual is the difference between the actual image and
     the predicted image. This is what gets quantized and stored
     in GLIC-style compression.
+
+    Clamp modes:
+    - NONE: Keep full range (-1.0 to 1.0 for normalized images)
+    - MOD256: Wrap to 0-1 range using modulo (creates different glitch aesthetic)
     """
 
     name = "Residual"
@@ -179,6 +183,16 @@ class ResidualNode(Node):
             description="Residual image (actual - predicted)",
         )
 
+    def define_parameters(self) -> None:
+        """Define clamp method parameter."""
+        self.add_parameter(
+            "clamp_method",
+            param_type=ParameterType.ENUM,
+            default="NONE",
+            choices=["NONE", "MOD256"],
+            description="Residual clamping method (MOD256 wraps to 0-1 range)",
+        )
+
     def process(self) -> None:
         """Calculate residuals."""
         actual: ImageBuffer = self.get_input_value("actual")
@@ -192,8 +206,16 @@ class ResidualNode(Node):
         if actual.shape != predicted.shape:
             raise ValueError("Image shapes must match")
 
+        clamp_method = self.get_parameter("clamp_method")
+
         # Calculate residual
         residual_data = actual.data - predicted.data
+
+        # Apply clamping
+        if clamp_method == "MOD256":
+            # Wrap to 0-1 range using modulo
+            # This creates different glitch aesthetics compared to keeping signed values
+            residual_data = np.mod(residual_data, 1.0)
 
         result = ImageBuffer(
             data=residual_data,
@@ -202,6 +224,7 @@ class ResidualNode(Node):
             metadata={
                 **actual.metadata,
                 "is_residual": True,
+                "clamp_method": clamp_method,
             },
         )
 
@@ -215,6 +238,9 @@ class ReconstructNode(Node):
 
     Adds predictions back to residuals to recover the image.
     This is the decoding step in GLIC-style compression.
+
+    When using MOD256 clamped residuals, use the same clamp method
+    for proper reconstruction.
     """
 
     name = "Reconstruct"
@@ -243,6 +269,16 @@ class ReconstructNode(Node):
             description="Reconstructed image",
         )
 
+    def define_parameters(self) -> None:
+        """Define clamp method parameter."""
+        self.add_parameter(
+            "clamp_method",
+            param_type=ParameterType.ENUM,
+            default="NONE",
+            choices=["NONE", "MOD256"],
+            description="Residual clamp method used during encoding",
+        )
+
     def process(self) -> None:
         """Reconstruct image."""
         residual: ImageBuffer = self.get_input_value("residual")
@@ -256,10 +292,23 @@ class ReconstructNode(Node):
         if residual.shape != predicted.shape:
             raise ValueError("Image shapes must match")
 
-        # Reconstruct
-        reconstructed_data = residual.data + predicted.data
+        clamp_method = self.get_parameter("clamp_method")
 
-        # Optionally clip to valid range
+        # Check metadata for clamp method if not specified
+        if clamp_method == "NONE" and residual.metadata.get("clamp_method") == "MOD256":
+            clamp_method = "MOD256"
+
+        # Reconstruct based on clamp method
+        if clamp_method == "MOD256":
+            # For MOD256, we need to handle the wraparound
+            # residual = (actual - predicted) mod 1.0
+            # So: actual = (residual + predicted) mod 1.0
+            reconstructed_data = np.mod(residual.data + predicted.data, 1.0)
+        else:
+            # Standard reconstruction
+            reconstructed_data = residual.data + predicted.data
+
+        # Clip to valid range
         reconstructed_data = np.clip(reconstructed_data, 0.0, 1.0)
 
         result = ImageBuffer(

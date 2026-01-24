@@ -202,6 +202,47 @@ class TestResidualNode:
 
         np.testing.assert_allclose(result.data, expected)
 
+    def test_residual_clamp_none(self):
+        """CLAMP_NONE keeps full residual range including negatives."""
+        actual_data = np.array([[[0.2, 0.8]]], dtype=np.float32)
+        predicted_data = np.array([[[0.5, 0.3]]], dtype=np.float32)
+
+        actual = ImageBuffer(actual_data)
+        predicted = ImageBuffer(predicted_data)
+
+        node = ResidualNode()
+        node.inputs["actual"].default = actual
+        node.inputs["predicted"].default = predicted
+        node.set_parameter("clamp_method", "NONE")
+
+        node.execute()
+
+        result = node.outputs["residual"].get_value()
+        # Raw residuals: 0.2-0.5=-0.3, 0.8-0.3=0.5
+        expected = np.array([[[-0.3, 0.5]]], dtype=np.float32)
+        np.testing.assert_allclose(result.data, expected, atol=1e-6)
+
+    def test_residual_clamp_mod256(self):
+        """CLAMP_MOD256 wraps residuals to 0-1 range."""
+        actual_data = np.array([[[0.2, 0.8]]], dtype=np.float32)
+        predicted_data = np.array([[[0.5, 0.3]]], dtype=np.float32)
+
+        actual = ImageBuffer(actual_data)
+        predicted = ImageBuffer(predicted_data)
+
+        node = ResidualNode()
+        node.inputs["actual"].default = actual
+        node.inputs["predicted"].default = predicted
+        node.set_parameter("clamp_method", "MOD256")
+
+        node.execute()
+
+        result = node.outputs["residual"].get_value()
+        # Raw residuals: -0.3, 0.5
+        # MOD256: np.mod(-0.3, 1.0) = 0.7, np.mod(0.5, 1.0) = 0.5
+        expected = np.array([[[0.7, 0.5]]], dtype=np.float32)
+        np.testing.assert_allclose(result.data, expected, atol=1e-6)
+
     def test_residual_metadata(self):
         """Residual output has correct metadata."""
         actual = ImageBuffer(np.zeros((3, 8, 8), dtype=np.float32))
@@ -253,6 +294,28 @@ class TestReconstructNode:
         result = node.outputs["reconstructed"].get_value()
         assert result.data.max() <= 1.0
 
+    def test_reconstruction_clamp_mod256(self):
+        """Reconstruction with MOD256 unwraps residuals before adding."""
+        # Residual was MOD256'd: original -0.3 became 0.7
+        residual_data = np.array([[[0.7, 0.5]]], dtype=np.float32)
+        predicted_data = np.array([[[0.5, 0.3]]], dtype=np.float32)
+
+        residual = ImageBuffer(residual_data)
+        predicted = ImageBuffer(predicted_data)
+
+        node = ReconstructNode()
+        node.inputs["residual"].default = residual
+        node.inputs["predicted"].default = predicted
+        node.set_parameter("clamp_method", "MOD256")
+
+        node.execute()
+
+        result = node.outputs["reconstructed"].get_value()
+        # MOD256 unwrap: 0.7 > 0.5 means it was negative, so 0.7-1.0=-0.3
+        # Then: -0.3 + 0.5 = 0.2, 0.5 + 0.3 = 0.8
+        expected = np.array([[[0.2, 0.8]]], dtype=np.float32)
+        np.testing.assert_allclose(result.data, expected, atol=1e-6)
+
 
 class TestPredictionRoundTrip:
     """V2.4 - Test prediction/residual/reconstruction round-trip."""
@@ -293,4 +356,48 @@ class TestPredictionRoundTrip:
         np.testing.assert_allclose(
             original.data, reconstructed.data, atol=1e-5,
             err_msg="Round-trip prediction failed"
+        )
+
+    def test_roundtrip_mod256_clamp(self):
+        """Round-trip with MOD256 clamp method preserves original."""
+        # Create test image
+        original_data = np.random.rand(3, 64, 64).astype(np.float32)
+        original = ImageBuffer(original_data, colorspace="RGB")
+
+        # Create segments
+        from artifice.nodes.segmentation.quadtree import quadtree_segment
+        segments = quadtree_segment(original_data, min_size=8, max_size=32)
+
+        # Predict
+        predict_node = PredictNode()
+        predict_node.inputs["image"].default = original
+        predict_node.inputs["segments"].default = segments
+        predict_node.set_parameter("predictor", "PAETH")
+        predict_node.execute()
+        predicted = predict_node.outputs["predicted"].get_value()
+
+        # Calculate residual with MOD256
+        residual_node = ResidualNode()
+        residual_node.inputs["actual"].default = original
+        residual_node.inputs["predicted"].default = predicted
+        residual_node.set_parameter("clamp_method", "MOD256")
+        residual_node.execute()
+        residual = residual_node.outputs["residual"].get_value()
+
+        # Verify residual is in [0, 1] range (MOD256 property)
+        assert residual.data.min() >= 0.0, "MOD256 residual should be >= 0"
+        assert residual.data.max() <= 1.0, "MOD256 residual should be <= 1"
+
+        # Reconstruct with MOD256
+        reconstruct_node = ReconstructNode()
+        reconstruct_node.inputs["residual"].default = residual
+        reconstruct_node.inputs["predicted"].default = predicted
+        reconstruct_node.set_parameter("clamp_method", "MOD256")
+        reconstruct_node.execute()
+        reconstructed = reconstruct_node.outputs["reconstructed"].get_value()
+
+        # Should match original
+        np.testing.assert_allclose(
+            original.data, reconstructed.data, atol=1e-5,
+            err_msg="Round-trip MOD256 prediction failed"
         )
