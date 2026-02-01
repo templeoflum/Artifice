@@ -113,20 +113,38 @@ def register_all_nodes():
     NodeRegistry.register(NullNode)
 
     # GPU-accelerated nodes
-    from artifice.nodes.gpu.generator import TestCardGPUNode
-    from artifice.nodes.gpu.corruption import (
-        BitFlipGPUNode,
-        BitShiftGPUNode,
-        XORNoiseGPUNode,
+    from artifice.nodes.gpu import (
+        # Generators
+        TestCardGPUNode, NoiseGPUNode,
+        # Corruption
+        BitFlipGPUNode, BitShiftGPUNode, XORNoiseGPUNode,
+        DataRepeatGPUNode, DataDropGPUNode, DataScrambleGPUNode, DataWeaveGPUNode,
+        # Color
+        ColorSpaceGPUNode, BlendGPUNode, InvertGPUNode, BrightnessContrastGPUNode,
+        ThresholdGPUNode, PosterizeGPUNode, ChannelSplitGPUNode, ChannelMergeGPUNode,
+        ChannelSwapGPUNode,
+        # Quantization
+        QuantizeGPUNode,
+        # Transform
+        PixelSortGPUNode, MirrorGPUNode, RotateGPUNode, BlurGPUNode, SharpenGPUNode,
+        EdgeDetectGPUNode, DCTGPUNode, FFTGPUNode, WaveletGPUNode,
+        # GLIC
+        GLICPredictGPUNode, GLICResidualGPUNode, GLICReconstructGPUNode,
     )
-    from artifice.nodes.gpu.color import ColorSpaceGPUNode
-    from artifice.nodes.gpu.quantization import QuantizeGPUNode
-    NodeRegistry.register(TestCardGPUNode)
-    NodeRegistry.register(BitFlipGPUNode)
-    NodeRegistry.register(BitShiftGPUNode)
-    NodeRegistry.register(XORNoiseGPUNode)
-    NodeRegistry.register(ColorSpaceGPUNode)
-    NodeRegistry.register(QuantizeGPUNode)
+    # Register all GPU nodes
+    for node_class in [
+        TestCardGPUNode, NoiseGPUNode,
+        BitFlipGPUNode, BitShiftGPUNode, XORNoiseGPUNode,
+        DataRepeatGPUNode, DataDropGPUNode, DataScrambleGPUNode, DataWeaveGPUNode,
+        ColorSpaceGPUNode, BlendGPUNode, InvertGPUNode, BrightnessContrastGPUNode,
+        ThresholdGPUNode, PosterizeGPUNode, ChannelSplitGPUNode, ChannelMergeGPUNode,
+        ChannelSwapGPUNode,
+        QuantizeGPUNode,
+        PixelSortGPUNode, MirrorGPUNode, RotateGPUNode, BlurGPUNode, SharpenGPUNode,
+        EdgeDetectGPUNode, DCTGPUNode, FFTGPUNode, WaveletGPUNode,
+        GLICPredictGPUNode, GLICResidualGPUNode, GLICReconstructGPUNode,
+    ]:
+        NodeRegistry.register(node_class)
 
 
 def main():
